@@ -33,18 +33,27 @@ public class UserAgent {
 	    String user_agent_string = driver.findElement(By.id("id_ua")).getText();
 	    System.out.println("User Agent: \t" + user_agent_string);
 
-	    String regex = "^" + "(?:Mozilla/5.0\\s)" // group N/A
-		    + "((?:\\(Macintosh.+?\\)\\s)|(?:\\(Windows NT.+?\\)\\s)|(?:\\(iPhone.+?\\)\\s)|(?:\\(.*Android.+?\\)\\s))" // OS
+	    String regex = "^"
+		    +"(?:Mozilla\\/5.0)(?:\\s\\()((?:Macintosh\\;\\sIntel\\s)|(?:Windows\\s)|(?:iPhone\\;\\sCPU\\s)|(?:Linux\\;\\sU\\;\\s)?)"
+		    + "((?:Mac\\sOS.+?)?(?:NT\\s.+?)?(?:OS\\s.+?)?(?:Android\\s.+?)?)?(?:\\)\\s)"
+		    + "(?:.*\\s((?:Safari\\/537.+?)|(?:Firefox\\/56.+?)|(?:Safari\\/604.+?)|(?:Edge\\/15.+?)|(?:Mobile Safari\\/537.+?)?))"
+		    + "$";
+		    
+		    
+//		    "^" + "(?:Mozilla\\/5.0\\s)" // group N/A
+//		    + "((?:\\(Macintosh.+?\\)\\s)|(?:\\(Windows NT.+?\\)\\s)|(?:\\(iPhone.+?\\)\\s)|(?:\\(.*Android.+?\\)\\s))" // OS
 		    // +
-		    // "((?:\\sIntel.+?\\))|(?:NT.+?\\;\\s.+?\\;)|(?:CPU.+?_.)|(?:Android.+?\\;))"//
+
 		    // OS
 		    // version
-		    + "((?:.*Firefox/.+?)|(?:.*Chrome/.+?)|(?:.*Safari/.+?))" // Browser
-
-//		     + "((Firefox\\/[0-9.]{2,4})|(Safari\\/[0-9.]{3,7})|(Edge\\/[0-9.]{3,8})|(Chrome\\/[0-9.]{6,9}}))"
-		    // // Browser
-		    // version
-		    + "$";
+//		    + "((?:.*Firefox/.+?)|(?:.*Chrome/.+?)|(?:.*Safari/.+?))" // Browser
+//"^"
+//		    + "(?:Mozilla\\/5.0)"
+//+"(?:\\s\\()((?:Macintosh\\;\\sIntel\\s)?(?:Windows\\s)?(?:iPhone\\;\\sCPU\\s)?(?:Linux\\;\\sU\\;\\s)?)(?:.*.+?)?"
+////		     
+//		    // // Browser
+//		    // version
+//		    + "$";
 
 	    Pattern p = Pattern.compile(regex);
 	    Matcher m = p.matcher(user_agent_string);
@@ -52,14 +61,15 @@ public class UserAgent {
 //	    System.out.println(m);
 	    // System.out.println(m.group(0));
 	    String os = m.group(1);
-	    // String osVer = m.group(2);
-	    String browser = m.group(2);
+	     String osVer = m.group(2);
+	    String browser = m.group(3);
 	    // String browserVer = m.group(3);
 //	    m.reset();
 	    System.out.println("OS: \t\t" + os);
-	    // System.out.println("OS Version: \t" + osVer);
-	    System.out.println("Browser: \t" + browser);
-	    // System.out.println("Browser Version: " + browserVer);
+	     System.out.println("OS Version: \t" + osVer);
+	    
+	    System.out.println("Browser: \t" + browser.replaceAll("(\\/.*.+?)", ""));
+	     System.out.println("Browser Ver: \t" + browser);
 	    System.out.println("Next UA------------------------------------------+");
 	    driver.quit();
 	}
